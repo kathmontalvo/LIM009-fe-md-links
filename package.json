@@ -4,7 +4,8 @@
   "description": "md-links library",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "build": "babel src -d lib"
   },
   "repository": {
     "type": "git",
@@ -17,17 +18,13 @@
   ],
   "author": "Kathlen Montalvo",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/kathmontalvo/LIM009-fe-md-links/issues"
-  },
   "bin": {
-    "run-cli": "./src/index.js"
+    "md-links": "./lib/index.js"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.4",
     "@babel/core": "^7.4.5",
     "@babel/preset-env": "^7.4.5",
-    "babel-preset-es2015": "^6.24.1",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.17.3",
