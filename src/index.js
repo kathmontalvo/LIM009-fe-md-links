@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-const fs = require('fs');
-const path = require('path');
-const marked = require('marked')
+import fs from 'fs';
+import path from 'path'
+import marked from 'marked'
 
 const converToAbs = (relRoute) => {
   return path.resolve(relRoute);
@@ -49,7 +49,7 @@ export const filePath = (route) => {
 
 
 // const route = process.argv[1];
-const route = 'C:\\Users\\Kathlen\\Google Drive\\Programación\\Laboratoria\\bootcamp\\Pruebas\\md-files';
+const route = 'C:\\Users\\Kathlen\\Google Drive\\Programación\\Laboratoria\\bootcamp\\Pruebas\\md-files'
 const file = 'C:\\Users\\Kathlen\\Google Drive\\Programación\\Laboratoria\\bootcamp\\Pruebas\\md-files\\nivel1\\markdown.md'
 
 const fileContent = (route) => {
@@ -64,27 +64,29 @@ const fileContent = (route) => {
 }
 
 
-fileContent(route).forEach(res => {
-  // const tokens = marked.lexer(cont);
-  // const html = marked.parser(tokens);
-  // // console.log(html);
-  // console.log(tokens.links);
 
-  // https://github.com/tcort/markdown-link-extractor/blob/master/index.js
+const mdLinks = (route) => {
+  return new Promise((resolve, reject) => {
+    const links = [];
 
-  const links = [];
+    fileContent(route).forEach(res => {
+      // https://github.com/tcort/markdown-link-extractor/blob/master/index.js
 
-  const renderer = new marked.Renderer();
+      const renderer = new marked.Renderer();
 
-  renderer.link =  (href, title, text) => {
-    links.push({
-      href: href,
-      text: text,
-      file: res.file
-    });
-  };
+      renderer.link = (href, title, text) => {
+        links.push({
+          href: href,
+          text: text,
+          file: res.file
+        });
+      };
+      marked(res.content, { renderer: renderer });
+    })
+    resolve(links);
+  })
+}
 
-  marked(res.content, { renderer: renderer });
-  console.log(links)
-  return links;
-})
+mdLinks(file).then(res => console.log(res)) 
+
+
