@@ -36,6 +36,8 @@
     "regenerator-runtime": "^0.13.2"
   },
   "dependencies": {
-    "marked": "^0.6.2"
+    "babel-polyfill": "^6.26.0",
+    "marked": "^0.6.2",
+    "node-fetch": "^2.6.0"
   }
 }

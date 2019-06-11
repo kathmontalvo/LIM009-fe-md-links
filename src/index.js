@@ -3,6 +3,8 @@
 import fs from 'fs';
 import path from 'path'
 import marked from 'marked'
+import fetch from 'node-fetch'
+import "regenerator-runtime/runtime";
 
 const converToAbs = (relRoute) => {
   return path.resolve(relRoute);
@@ -12,30 +14,24 @@ const isPathAbs = (route) => {
   return path.isAbsolute(route)
 }
 
-const getAbsRouteFromFiles = (arr) => {
-  return arr.map(file => {
-    return path.resolve(file)
-  })
-}
-
-const readDirectory = (route) => {
-  return fs.readdir(route, (err, files) => {
-    if (err) throw err;
-    files.forEach((f) => {
-      isRouteFile(f)
-    })
-  })
-}
-
 const isFile = (route) => {
   const stats = fs.statSync(route);
   return stats.isFile()
 }
 
-
+const getAbsRoute = (route) => {
+  if (isPathAbs(route)) {
+    return route
+  } else if (!isPathAbs(route)) {
+    return converToAbs(route)
+  }
+}
 
 let arrFiles = []
-export const filePath = (route) => {
+const filePath = (newRoute) => {
+
+  const route = getAbsRoute(newRoute)
+
   if (isFile(route) && path.extname(route) === '.md') {
     arrFiles.push(route)
   }
@@ -63,30 +59,62 @@ const fileContent = (route) => {
   return arrContent
 }
 
+// const mdOptions = (options) => {
+//   options = {}
+//   options.validate = true
+// }
 
 
-const mdLinks = (route) => {
-  return new Promise((resolve, reject) => {
-    const links = [];
+const links = [];
 
-    fileContent(route).forEach(res => {
-      // https://github.com/tcort/markdown-link-extractor/blob/master/index.js
+const extractedLinks = (route) => {
 
-      const renderer = new marked.Renderer();
+  fileContent(route).forEach(res => {
+    // https://github.com/tcort/markdown-link-extractor/blob/master/index.js
 
-      renderer.link = (href, title, text) => {
-        links.push({
-          href: href,
-          text: text,
-          file: res.file
-        });
-      };
-      marked(res.content, { renderer: renderer });
+    const renderer = new marked.Renderer();
+
+    renderer.link = (href, title, text) => {
+      links.push({
+        href: href,
+        text: text,
+        file: res.file
+      });
+    };
+    marked(res.content, { renderer: renderer });
+  })
+  return links;
+}
+
+
+const validateLinks = (file) => {
+  const promiseArr = extractedLinks(file).map(element => {
+    const url = element.href;
+    return fetch(url).then(res => {
+      element.status = res.status
+      if (res.ok) {
+        element.ok = 'ok'
+      } else {
+        element.ok = 'fail'
+      }
+      return element
     })
-    resolve(links);
+  })
+  return Promise.all(promiseArr)
+}
+
+
+const mdLinks = (route, options) => {
+  return new Promise((resolve, reject) => {
+    if (options.validate == true) {
+      validateLinks(route).then((arrResults) => {
+        resolve(arrResults)
+      })
+    } else if (!options || options.validate == false) {
+      resolve(extractedLinks(route))
+    }
   })
 }
 
-mdLinks(file).then(res => console.log(res)) 
-
-
+mdLinks(route, { validate: true })
+  .then(result => console.log(result))
