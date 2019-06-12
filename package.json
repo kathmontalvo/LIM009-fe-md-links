@@ -4,7 +4,7 @@
   "description": "md-links library",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --collectCoverage",
     "build": "babel src -d lib"
   },
   "repository": {

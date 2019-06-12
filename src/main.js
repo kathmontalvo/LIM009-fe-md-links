@@ -1,111 +1,86 @@
-// #!/usr/bin/env node
-//para obtener varias rutas absolutas :  console.log(process.env.PATH.split(path.delimiter))
-const fs = require('fs');
-const fsp = require('fs').promises
-const path = require('path');
+#!/usr/bin/env node
 
-// fsp.readdir('C:\\Users\\Kathlen\\Google Drive\\Programación\\Laboratoria\\bootcamp\\Pruebas\\md-files\\nivel1').then(file => {console.log(file)})
-
-// export const isPathAbsolute = (file) => {
-//   return path.isAbsolute(file)
-// };
-
-// export const convertToAbs = (relativeFile) => {
-//   return path.resolve(relativeFile);
-// }
+import fs from 'fs';
+import path from 'path'
+import marked from 'marked'
+import fetch from 'node-fetch'
+import "regenerator-runtime/runtime";
 
 
-// export const checkExt = (file) => {
-//   return path.extname(file)
-// }
-
-
-const getAbsRoute = (arr) => {
-  const files = arr.map(file => {
-    return path.resolve(file)
-  })
-  return files
+export const isPathAbs = (route) => {
+  return path.isAbsolute(route)
 }
 
-// const readMyDir = (route) => {
-//   return new Promise((resolve, reject) => {
-//     fs.readdir(route, (err, list) => {
-//       if (err) throw reject(err);
-//       resolve(list) //list is an array with files 
-//     });
-//   })
-// }
-// readMyDir('C:\\Users\\Kathlen\\Google Drive\\Programación\\Laboratoria\\bootcamp\\Pruebas\\md-files\\nivel1').then(result => {
-//   getAbsRoute(result)
-// })
+export const getAbsRoute = (route) => {
+  if (isPathAbs(route)) {
+    return route
+  } else if (!isPathAbs(route)) {
+    return path.resolve(route)
+  }
+}
 
-export const pathIsFile = (route) => {
-  return new Promise((resolve, reject) => {
+let arrFiles = []
+export const filePath = (newRoute) => {
+  const route = getAbsRoute(newRoute)
+  const isFile = fs.statSync(route).isFile()
 
-    fsp.stat('C:\\Users\\Kathlen\\Google Drive\\Programación\\Laboratoria\\bootcamp\\Pruebas\\md-files\\nivel1').then(stats => {
-      const isFile = stats.isFile();
-      const isDirectory = stats.isDirectory();
+  if (isFile && path.extname(route) === '.md') {
+    arrFiles.push(route)
+  }
+  else if (!isFile) {
+    fs.readdirSync(route).forEach((f) => {
+      filePath(path.join(route, f))
+    })
+  }
+  return arrFiles
+}
 
-      let arrFiles = []
-      if (isFile) {
-        arrFiles.push(route)
-        resolve(arrFiles)
 
-      }
-
-      if (isDirectory) {
-        fsp.readdir(route).then(arrFiles => {
-          let faltan = arrFiles.length;
-          arrFiles.forEach(f => {
-            pathIsFile(f).then((arr) => {
-              faltan = faltan - 1;
-              if (faltan === 0) {
-                console.log(arr)
-                resolve(arr)
-              }
-            })
-          })
-          // const filesAbs = files.map(file => {
-          //   path.resolve(file)
-          // })
-          // filesAbs.forEach(file => {
-          //   arrFiles = arrFiles.concat(pathIsFile(file))
-          // })  
-        })
-      }
-
-      console.log(arrFiles)
-      return arrFiles
+export const fileContent = (route) => {
+  const arrContent = []
+  filePath(route).forEach(file => {
+    arrContent.push({
+      content: fs.readFileSync(file).toString(),
+      file: file
     })
   })
-  /* return new Promise((resolve, reject) => {
-    fs.stat(route, (err, stats) => {
-      if (err) throw reject(err);
-
-      const isFile = stats.isFile()
-      const isDirectory = stats.isDirectory()
-
-      let arrFiles = []
-      if (isFile) {
-        arrFiles.push(route)
-      }
-
-      if (isDirectory) {
-        fsp.readdir(route).then(files => {
-          const filesAbs = files.map(file => {
-            return path.resolve(file)
-          })
-          return filesAbs.forEach(file => {
-            arrFiles = arrFiles.concat(pathIsFile(file))
-          })  
-        })
-      }
-      resolve(arrFiles)
-    });
-  
-  }) */
+  return arrContent
 }
 
-// pathIsFile('C:\\Users\\Kathlen\\Google Drive\\Programación\\Laboratoria\\bootcamp\\Pruebas\\md-files\\nivel1')
-  // .then(result => console.log(result))
+
+export const extractedLinks = (route) => {
+  const links = [];
+  fileContent(route).forEach(res => {
+    // https://github.com/tcort/markdown-link-extractor/blob/master/index.js
+
+    const renderer = new marked.Renderer();
+
+    renderer.link = (href, title, text) => {
+      links.push({
+        href: href,
+        text: text,
+        file: res.file
+      });
+    };
+    marked(res.content, { renderer: renderer });
+  })
+  return links;
+}
+
+
+export const validateLinks = (file) => {
+  const promiseArr = extractedLinks(file).map(element => {
+    const url = element.href;
+    return fetch(url).then(res => {
+      element.status = res.status
+      if (res.ok) {
+        element.ok = 'ok'
+      } else {
+        element.ok = 'fail'
+      }
+      return element
+    })
+  })
+  return Promise.all(promiseArr)
+}
 
