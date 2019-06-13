@@ -4,7 +4,7 @@
   "description": "md-links library",
   "main": "index.js",
   "scripts": {
-    "test": "jest --collectCoverage",
+    "test": "jest --coverage",
     "build": "babel src -d lib"
   },
   "repository": {
@@ -19,7 +19,7 @@
   "author": "Kathlen Montalvo",
   "license": "ISC",
   "bin": {
-    "md-links": "./lib/index.js"
+    "md-links": "./lib/cli.js"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.4",

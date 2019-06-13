@@ -19,17 +19,15 @@ export const getAbsRoute = (route) => {
   }
 }
 
-let arrFiles = []
-export const filePath = (newRoute) => {
+export const filePath = (newRoute, arrFiles = []) => {
   const route = getAbsRoute(newRoute)
-  const isFile = fs.statSync(route).isFile()
-
+  const isFile = fs.statSync(route).isFile();
   if (isFile && path.extname(route) === '.md') {
     arrFiles.push(route)
   }
   else if (!isFile) {
     fs.readdirSync(route).forEach((f) => {
-      filePath(path.join(route, f))
+      filePath(path.join(route, f), arrFiles)
     })
   }
   return arrFiles
