@@ -82,3 +82,19 @@ export const validateLinks = (file) => {
   return Promise.all(promiseArr)
 }
 
+export const linkStats = (arrObj) => {
+  const allUrl = arrObj.map( el => {
+    return el.href
+  })
+  const url = new Set(allUrl);
+  
+  const failUrl = arrObj.filter( el => {
+    return el.ok === 'fail'
+  })
+  
+  return {
+    total: allUrl.length,
+    unique: url.size,
+    broken: failUrl.length
+  }
+}

@@ -1,4 +1,4 @@
-import { mdLinks } from '../src/api.js/index.js'
+import { mdLinks } from '../src/api.js'
 
 describe('funcion mdLinks', () => {
   it('deberia retornas un arr de obj con el url, texto y ruta absoluta', (done) => {
