@@ -1,0 +1,146 @@
+import { isPathAbs, getAbsRoute, filePath, fileContent, extractedLinks, validateLinks, linkStats } from '../src/main.js'
+import { mdLinks } from '../src/api.js'
+import mock from 'mock-fs'
+
+beforeEach(() => {
+  mock({
+    'level-one': {
+      'level-two': {
+        'index.html': '',
+        'README.md': `
+        ## Consideraciones generales
+        - Este proyecto se debe "resolver" de manera individual.
+        - La librería debe estar implementada en JavaScript para ser ejecutada con Node.js. **Está permitido usar librerías externas**.
+        Te recomendamos utilizar [Jest](https://jestjs.io/) para tus pruebas unitarias.
+        Podemos instalar directamente desde GitHub. Ver [docs oficiales de npm install acá](https://docs.npmjs.com/cli/install).
+        Ahora un archivo roto [fail file](http://archivoroto.fail666.com/fail)
+        `,
+        'prueba.md': `
+        Este archivo no tiene links.
+        `
+      }
+    },
+    'bootcamp.js': '',
+    'markdown.md': `
+    [Markdown](https://es.wikipedia.org/wiki/Markdown) es un lenguaje de marcado ligero muy popular entre developers. Dentro de una comunidad de código abierto, nos han propuesto crear una herramienta usando [Node.js](https://nodejs.org/), que lea y analice archivos en formato Markdown.
+    - [¿Qué es Node.js y para qué sirve? - drauta.com](https://www.dkkiorauta.com/que-es-nodejs-y-para-que-sirve/fail)
+    `
+  })
+})
+
+afterEach(mock.restore)
+
+describe('función isPathAbsolute', () => {
+  it('deberia retornar true si la ruta es absoluta', () => {
+    expect(isPathAbs('C:\\Users\\Kathlen\\Google Drive\\Programación\\Laboratoria\\bootcamp\\LIM009-fe-md-links\\level-one')).toBe(true)
+  });
+  it('deberia retornar false si la ruta no es absoluta', () => {
+    expect(isPathAbs('level-one/markdown.md')).toBe(false)
+  })
+});
+
+
+describe('función getAbsRoute', () => {
+  it('deberia retornar la ruta absoluta de la relativa que es ingresada', () => {
+    expect(getAbsRoute('level-one/level-two/README.md')).toBe('C:\\Users\\Kathlen\\Google Drive\\Programación\\Laboratoria\\bootcamp\\LIM009-fe-md-links\\level-one\\level-two\\README.md')
+  })
+  it('deberia retornar la ruta absoluta de la abs que es ingresada', () => {
+    expect(getAbsRoute('C:\\Users\\Kathlen\\Google Drive\\Programación\\Laboratoria\\bootcamp\\LIM009-fe-md-links\\level-one')).toBe('C:\\Users\\Kathlen\\Google Drive\\Programación\\Laboratoria\\bootcamp\\LIM009-fe-md-links\\level-one')
+  })
+})
+
+describe('función extractedLinks', () => {
+
+  it('debería retornar un array de objetos', (done) => {
+   extractedLinks('markdown.md').then(result => {
+    const objLinks = [{
+      href: 'https://jestjs.io/',
+      text: 'Jest',
+      file: 'C:\\Users\\Kathlen\\Google Drive\\Programación\\Laboratoria\\bootcamp\\Pruebas\\md-files\\nivel1\\markdown.md'
+    }, {
+      href: 'https://docs.npmjs.com/cli/install',
+      text: 'docs oficiales de <code>npm install</code> acá',
+      file: 'C:\\Users\\Kathlen\\Google Drive\\Programación\\Laboratoria\\bootcamp\\Pruebas\\md-files\\nivel1\\markdown.md'
+    }]
+
+    
+     expect(result).toEqual(objLinks)
+     done()
+   })
+  })
+})
+
+
+describe('función fileContent', () => {
+  it('deberia retornar el contenido de los archivos md', () => {
+    const content = [{
+      content: `
+        ## Consideraciones generales
+        - Este proyecto se debe "resolver" de manera individual.
+        - La librería debe estar implementada en JavaScript para ser ejecutada con Node.js. **Está permitido usar librerías externas**.
+        Te recomendamos utilizar [Jest](https://jestjs.io/) para tus pruebas unitarias.
+        Podemos instalar directamente desde GitHub. Ver [docs oficiales de npm install acá](https://docs.npmjs.com/cli/install).
+        Ahora un archivo roto [fail file](http://archivoroto.fail666.com/fail)
+        `,
+      file: 'C:\\Users\\Kathlen\\Google Drive\\Programación\\Laboratoria\\bootcamp\\LIM009-fe-md-links\\level-one\\level-two\\README.md'
+    }]
+
+    expect(fileContent('C:\\Users\\Kathlen\\Google Drive\\Programación\\Laboratoria\\bootcamp\\LIM009-fe-md-links\\level-one\\level-two\\README.md')).toEqual(content)
+  })
+})
+
+
+describe('funcion filePath', () => {
+  it('deberia retornar un array con las rutas abs .md', () => {
+    expect(filePath('C:\\Users\\Kathlen\\Google Drive\\Programación\\Laboratoria\\bootcamp\\LIM009-fe-md-links\\level-one')).toEqual([
+      'C:\\Users\\Kathlen\\Google Drive\\Programación\\Laboratoria\\bootcamp\\LIM009-fe-md-links\\level-one\\level-two\\README.md',
+      'C:\\Users\\Kathlen\\Google Drive\\Programación\\Laboratoria\\bootcamp\\LIM009-fe-md-links\\level-one\\level-two\\prueba.md'
+    ])
+  })
+
+  it('deberia retornar la ruta que es ingresada', () => {
+    expect(filePath('C:\\Users\\Kathlen\\Google Drive\\Programación\\Laboratoria\\bootcamp\\LIM009-fe-md-links\\markdown.md')).toEqual(['C:\\Users\\Kathlen\\Google Drive\\Programación\\Laboratoria\\bootcamp\\LIM009-fe-md-links\\markdown.md'])
+  })
+})
+/*
+describe('función validateLinks', () => {
+  it('deberia retornar un array de obj que contengan las prop status y ok', (done) => {
+    validateLinks('C:\\Users\\Kathlen\\Google Drive\\Programación\\Laboratoria\\bootcamp\\Pruebas\\md-files\\nivel1\\markdown.md').then(result => {
+      const validated = [{
+        href: 'https://jestjs.io/',
+        text: 'Jest',
+        file:
+          'C:\\Users\\Kathlen\\Google Drive\\Programación\\Laboratoria\\bootcamp\\Pruebas\\md-files\\nivel1\\markdown.md',
+        status: 200,
+        ok: 'ok'
+      },
+      {
+        href: 'https://docs.npmjs.com/cli/install',
+        text: 'docs oficiales de <code>npm install</code> acá',
+        file:
+          'C:\\Users\\Kathlen\\Google Drive\\Programación\\Laboratoria\\bootcamp\\Pruebas\\md-files\\nivel1\\markdown.md',
+        status: 200,
+        ok: 'ok'
+      }]
+      expect(result).toEqual(validated)
+      done()
+    })
+  })
+})
+
+
+describe('función linkStats', () => {
+  it('deberia retornar un obj con total, unique y broken url', (done) => {
+    mdLinks('C:\\Users\\Kathlen\\Google Drive\\Programación\\Laboratoria\\bootcamp\\Pruebas\\md-files\\nivel1\\markdown.md', { validate: true }).then(result => {
+      const totalUrl = {
+        total: 2,
+        unique: 2,
+        broken: 0
+      }
+      expect(linkStats(result)).toEqual(totalUrl);
+      done()
+    })
+  })
+})
+
+*/

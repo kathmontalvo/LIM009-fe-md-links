@@ -1,5 +1,5 @@
-import { isPathAbs, getAbsRoute, filePath, fileContent, extractedLinks, validateLinks } from '../src/main.js'
-
+import { isPathAbs, getAbsRoute, filePath, fileContent, extractedLinks, validateLinks, linkStats } from '../src/main.js'
+import { mdLinks } from '../src/api.js'
 
 
 describe('función isPathAbsolute', () => {
@@ -23,18 +23,71 @@ describe('función getAbsRoute', () => {
 
 describe('función extractedLinks', () => {
 
-  it('debería retornar un array de objetos', () => {
-    const objLinks = [{
-      href: 'https://jestjs.io/',
-      text: 'Jest',
-      file: 'C:\\Users\\Kathlen\\Google Drive\\Programación\\Laboratoria\\bootcamp\\Pruebas\\md-files\\nivel1\\markdown.md'
-    }, {
-      href: 'https://docs.npmjs.com/cli/install',
-      text: 'docs oficiales de <code>npm install</code> acá',
-      file: 'C:\\Users\\Kathlen\\Google Drive\\Programación\\Laboratoria\\bootcamp\\Pruebas\\md-files\\nivel1\\markdown.md'
-    }]
+  it('debería retornar un array de objetos', (done) => {
+    extractedLinks('C:\\Users\\Kathlen\\Google Drive\\Programación\\Laboratoria\\bootcamp\\Pruebas\\md-files\\nivel1\\markdown.md').then(result => {
+      const objLinks = [{
+        href: 'https://jestjs.io/',
+        text: 'Jest',
+        file: 'C:\\Users\\Kathlen\\Google Drive\\Programación\\Laboratoria\\bootcamp\\Pruebas\\md-files\\nivel1\\markdown.md'
+      }, {
+        href: 'https://docs.npmjs.com/cli/install',
+        text: 'docs oficiales de <code>npm install</code> acá',
+        file: 'C:\\Users\\Kathlen\\Google Drive\\Programación\\Laboratoria\\bootcamp\\Pruebas\\md-files\\nivel1\\markdown.md'
+      }]
 
-    expect(extractedLinks('C:\\Users\\Kathlen\\Google Drive\\Programación\\Laboratoria\\bootcamp\\Pruebas\\md-files\\nivel1\\markdown.md')).toEqual(objLinks)
+      expect(result).toEqual(objLinks)
+      done()
+    })
+  })
+  
+  it('debería retornar un array de objetos', (done) => {
+    extractedLinks('../Pruebas/md-files/nivel1/markdown.md').then(result => {
+      const objLinks = [{
+        href: 'https://jestjs.io/',
+        text: 'Jest',
+        file: 'C:\\Users\\Kathlen\\Google Drive\\Programación\\Laboratoria\\bootcamp\\Pruebas\\md-files\\nivel1\\markdown.md'
+      }, {
+        href: 'https://docs.npmjs.com/cli/install',
+        text: 'docs oficiales de <code>npm install</code> acá',
+        file: 'C:\\Users\\Kathlen\\Google Drive\\Programación\\Laboratoria\\bootcamp\\Pruebas\\md-files\\nivel1\\markdown.md'
+      }]
+
+      expect(result).toEqual(objLinks)
+      done()
+    })
+  })
+  
+  it('debería retornar un array de objetos', (done) => {
+    extractedLinks('C:\\Users\\Kathlen\\Google Drive\\Programación\\Laboratoria\\bootcamp\\Pruebas\\md-files\\nivel1\\markdown.md').then(result => {
+      const objLinks = [{
+        href: 'https://jestjs.io/',
+        text: 'Jest',
+        file: 'C:\\Users\\Kathlen\\Google Drive\\Programación\\Laboratoria\\bootcamp\\Pruebas\\md-files\\nivel1\\markdown.md'
+      }, {
+        href: 'https://docs.npmjs.com/cli/install',
+        text: 'docs oficiales de <code>npm install</code> acá',
+        file: 'C:\\Users\\Kathlen\\Google Drive\\Programación\\Laboratoria\\bootcamp\\Pruebas\\md-files\\nivel1\\markdown.md'
+      }]
+
+      expect(result).toEqual(objLinks)
+      done()
+    })
+  })
+  it('debería retornar un array de objetos', (done) => {
+    extractedLinks('C:\\Users\\Kathlen\\Google Drive\\Programación\\Laboratoria\\bootcamp\\Pruebas\\md-files\\nivel1\\nivel2\\new\\file.md').then(result => {
+      const objLinks = [{
+        href: 'https://es.wikipedia.org/wiki/Markdown',
+        text: 'Markdown',
+        file: 'C:\\Users\\Kathlen\\Google Drive\\Programación\\Laboratoria\\bootcamp\\Pruebas\\md-files\\nivel1\\nivel2\\new\\file.md'
+      }, {
+        href: 'https://nodejs.org/ppt',
+        text: 'Node.js',
+        file: 'C:\\Users\\Kathlen\\Google Drive\\Programación\\Laboratoria\\bootcamp\\Pruebas\\md-files\\nivel1\\nivel2\\new\\file.md'
+      }]
+
+      expect(result).toEqual(objLinks)
+      done()
+    })
   })
 })
 
@@ -81,6 +134,41 @@ describe('función validateLinks', () => {
         ok: 'ok'
       }]
       expect(result).toEqual(validated)
+      done()
+    })
+  })
+  it('deberia retornar un array de obj que contengan las prop status y ok', (done) => {
+    validateLinks('C:\\Users\\Kathlen\\Google Drive\\Programación\\Laboratoria\\bootcamp\\Pruebas\\md-files\\nivel1\\nivel2\\new\\file.md').then(result => {
+      const validated = [{
+        href: 'https://es.wikipedia.org/wiki/Markdown',
+        text: 'Markdown',
+        file: 'C:\\Users\\Kathlen\\Google Drive\\Programación\\Laboratoria\\bootcamp\\Pruebas\\md-files\\nivel1\\nivel2\\new\\file.md',
+        status: 200,
+        ok: 'ok'
+      }, {
+        href: 'https://nodejs.org/ppt',
+        text: 'Node.js',
+        file: 'C:\\Users\\Kathlen\\Google Drive\\Programación\\Laboratoria\\bootcamp\\Pruebas\\md-files\\nivel1\\nivel2\\new\\file.md',
+        status: 404,
+        ok: 'fail'
+      }]
+
+      expect(result).toEqual(validated)
+      done()
+    })
+  })
+})
+
+
+describe('función linkStats', () => {
+  it('deberia retornar un obj con total, unique y broken url', (done) => {
+    mdLinks('../Pruebas/md-files/nivel1/markdown.md', { validate: true }).then(result => {
+      const totalUrl = {
+        total: 2,
+        unique: 2,
+        broken: 0
+      }
+      expect(linkStats(result)).toEqual(totalUrl);
       done()
     })
   })

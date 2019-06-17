@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { mdLinks } from './api.js'
-import { linkStats } from './main.js'
+import { linkStats, extractedLinks } from './main.js'
 
 // https://stackoverflow.com/questions/30782693/run-function-in-script-from-command-line-node-js 
 const [, , ...args] = process.argv
@@ -33,5 +33,3 @@ mdLinks(route, { validate: true }).then(result => {
     console.log(basic, validated)
   }
 })
-
-
