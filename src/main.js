@@ -46,9 +46,9 @@ export const fileContent = (route) => {
 }
 
 
-export const extractedLinks = async (route) => {
+export const extractedLinks = (route) => {
   const links = [];
-  await fileContent(route).forEach(res => {
+  fileContent(route).forEach(res => {
     // https://github.com/tcort/markdown-link-extractor/blob/master/index.js
 
     const renderer = new marked.Renderer();
@@ -67,22 +67,19 @@ export const extractedLinks = async (route) => {
 
 
 export const validateLinks = (route) => {
-  return extractedLinks(route).then(file => {
-    const promiseArr = file.map(element => {
-      const url = element.href;
-      return fetch(url).then(res => {
-        element.status = res.status
-        if (res.ok) {
-          element.ok = 'ok'
-        } else {
-          element.ok = 'fail'
-        }
-        return element
-      })
+  const promiseArr = extractedLinks(route).map(element => {
+    const url = element.href;
+    return fetch(url).then(res => {
+      element.status = res.status
+      if (res.ok) {
+        element.ok = 'ok'
+      } else {
+        element.ok = 'fail'
+      }
+      return element
     })
-    return Promise.all(promiseArr)
   })
-
+  return Promise.all(promiseArr)
 }
 
 export const linkStats = (arrObj) => {
