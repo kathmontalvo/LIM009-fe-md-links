@@ -329,4 +329,4 @@ CLI: `npm install -g kathmontalvo/md-links`
 ### CLI
 
 ## Diagrama de flujo 
-![flow-chart](file:///C:/Users/Kathlen/Google%20Drive/Programaci%C3%B3n/Laboratoria/bootcamp/md-links.jpg)
+![md-links](https://user-images.githubusercontent.com/47748892/59810678-108a6600-92cc-11e9-8135-2701b8b4d6e1.jpg)
