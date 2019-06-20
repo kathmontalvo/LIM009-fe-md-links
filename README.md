@@ -326,7 +326,43 @@ CLI: `npm install -g kathmontalvo/md-links`
 
 ### API
 
+```js
+const mdLinks = require("md-links");
+
+mdLinks("./some/example.md")
+  .then(links => {
+    // => [{ href, text, file }]
+  })
+  .catch(console.error);
+
+mdLinks("./some/example.md", { validate: true })
+  .then(links => {
+    // => [{ href, text, file, status, ok }]
+  })
+  .catch(console.error);
+
+mdLinks("./some/dir")
+  .then(links => {
+    // => [{ href, text, file }]
+  })
+  .catch(console.error);
+```
 ### CLI
 
+El ejecutable de nuestra aplicación debe poder ejecutarse de la siguiente
+manera a través de la terminal:
+
+`md-links <path-to-file> [options]`
+
+Por ejemplo:
+
+```sh
+$ md-links ./some/example.md
+./some/example.md http://algo.com/2/3/ Link a algo
+./some/example.md https://otra-cosa.net/algun-doc.html algún doc
+./some/example.md http://google.com/ Google
+```
+
+
 ## Diagrama de flujo 
-![md-links](https://user-images.githubusercontent.com/47748892/59810678-108a6600-92cc-11e9-8135-2701b8b4d6e1.jpg)
+![flow-chart](https://user-images.githubusercontent.com/47748892/59810678-108a6600-92cc-11e9-8135-2701b8b4d6e1.jpg)
