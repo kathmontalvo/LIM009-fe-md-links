@@ -8,47 +8,31 @@ const [, , ...args] = process.argv
 const route = args[0]
 
 const options = (el, args) => {
-  const notVal = `${el.file} ${el.href} ${el.text}`
-  const val = `${el.status} ${el.ok}`
-  if (args[1] == '--validate') {
-    return notVal + val
+  if (args && args[1] == '--validate') {
+    return `${el.file} ${el.href} ${el.status} ${el.ok} ${el.text}`
   }
-  else if (!args.includes('--stats') && !args.includes('--validate')) {
-    return notVal
+  else if (args == undefined || !args[1]) {
+    return `${el.file} ${el.href} ${el.text}`
   }
 }
 
 export const cliOpts = (route, args) => {
-  return mdLinks(route, { validate: true }).then(result => {
-    const basicStats = linkStats(result);
-    const basic = `
-    Total: ${basicStats.total}
-    Unique: ${basicStats.unique}`
+ return mdLinks(route, { validate: true }).then(result => {
+   const basicStats = linkStats(result);
+   const basic = 
+`Total: ${basicStats.total}
+Unique: ${basicStats.unique}`
     const validated = `
-    Broken: ${basicStats.broken}`
-    
-    let finalResult;
-    if (args[1] == '--stats' && !args[2]) {
-      finalResult = basic
-    } else if (args[1] == '--stats' && args[2] == '--validate') {
-      finalResult = basic + validated
+Broken: ${basicStats.broken}`
+  
+    if (args && args[1] == '--stats' && !args[2]) {
+      return basic
+    } else if (args && args[1] == '--stats' && args[2] == '--validate') {
+      return basic + validated
     } else {
-      result.map(el => {
-        const notVal = `${el.file} ${el.href} ${el.text}`
-        const val = `${el.status} ${el.ok}`
-        if (args[1] == '--validate') {
-          finalResult += 
-`${notVal} ${val}
-`
-        }
-        else if (!args.includes('--stats') && !args.includes('--validate')) {
-          finalResult += 
-`${notVal}
-`
-        }
-      })
+      const links = result.map(el => options(el, args)).toString().replace(/,/g, '\n')
+      return links
     }
-    return finalResult;
   })
 }
 
