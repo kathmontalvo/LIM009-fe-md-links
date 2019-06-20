@@ -320,7 +320,13 @@ El módulo `md-links` es una herramienta que lee y analiza archivos de formato M
 
 ## Instalación
 
-## Docs
+CLI: `npm install -g kathmontalvo/md-links`
 
 ## Guía de uso
 
+### API
+
+### CLI
+
+## Diagrama de flujo 
+![flow-chart](file:///C:/Users/Kathlen/Google%20Drive/Programaci%C3%B3n/Laboratoria/bootcamp/md-links.jpg)
