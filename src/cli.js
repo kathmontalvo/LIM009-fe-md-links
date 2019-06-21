@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { mdLinks } from './api.js'
+import  mdLinks  from './api.js'
 import { linkStats } from './main.js'
 
 // https://stackoverflow.com/questions/30782693/run-function-in-script-from-command-line-node-js 

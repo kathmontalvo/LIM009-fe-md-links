@@ -2,10 +2,10 @@
 
 import { validateLinks, extractedLinks } from './main.js'
 
-export const mdLinks = (route, options) => {
+export default (route, options) => {
   return new Promise((resolve, reject) => {
     if (options && options.validate === true) {
-      validateLinks(route).then((arrResults) => {
+      validateLinks(extractedLinks(route)).then((arrResults) => {
         resolve(arrResults)
       })
     } else if (!options || options.validate === false) {

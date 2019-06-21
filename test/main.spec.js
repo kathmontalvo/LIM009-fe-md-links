@@ -1,5 +1,4 @@
 import { isPathAbs, getAbsRoute, filePath, fileContent, extractedLinks, validateLinks, linkStats } from '../src/main.js'
-import { mdLinks } from '../src/api.js'
 import mock from 'mock-fs'
 import path from 'path'
 import process from 'process'
@@ -10,7 +9,7 @@ beforeAll(() => {
       'level-two': {
         'index.html': '',
         'README.md':
-          `## Consideraciones generales
+`## Consideraciones generales
 - Este proyecto se debe "resolver" de manera individual.
 - La librería debe estar implementada en JavaScript para ser ejecutada con Node.js. **Está permitido usar librerías externas**.
 Te recomendamos utilizar [Jest](https://jestjs.io/) para tus pruebas unitarias.
@@ -22,11 +21,12 @@ Ahora un archivo roto [fail file](https://abc.github.io/assets/)`,
       }
     },
     'bootcamp.js': '',
-    'markdown.md': `
-    [Markdown](https://es.wikipedia.org/wiki/Markdown) es un lenguaje de marcado ligero muy popular entre developers. Dentro de una comunidad de código abierto, nos han propuesto crear una herramienta usando [Node.js](https://nodejs.org/), que lea y analice archivos en formato Markdown.
-    - [¿Qué es Node.js y para qué sirve? - drauta.com](https://www.dkkiorauta.com/que-es-nodejs-y-para-que-sirve/fail)
+'markdown.md': `
+[Markdown](https://es.wikipedia.org/wiki/Markdown) es un lenguaje de marcado ligero muy popular entre developers. Dentro de una comunidad de código abierto, nos han propuesto crear una herramienta usando [Node.js](https://nodejs.org/), que lea y analice archivos en formato Markdown.
+- [¿Qué es Node.js y para qué sirve? - drauta.com](https://www.dkkiorauta.com/que-es-nodejs-y-para-que-sirve/fail)
     `
   })
+  
 })
 
 afterAll(mock.restore)
@@ -107,45 +107,3 @@ describe('función extractedLinks', () => {
   })
 })
 
-describe('función validateLinks', () => {
-  it('deberia retornar un array de obj que contengan las prop status y ok', (done) => {
-    validateLinks(path.join(cwd, 'level-one', 'level-two', 'README.md')).then(result => {
-      const validated = [{
-        href: 'https://jestjs.io/',
-        text: 'Jest',
-        file: path.join(cwd, 'level-one', 'level-two', 'README.md'),
-        status: 200,
-        ok: 'ok'
-      }, {
-        href: 'https://docs.npmjs.com/cli/install',
-        text: 'docs oficiales de npm install acá',
-        file: path.join(cwd, 'level-one', 'level-two', 'README.md'),
-        status: 200,
-        ok: 'ok'
-      }, {
-        href: 'https://abc.github.io/assets/',
-        text: 'fail file',
-        file: path.join(cwd, 'level-one', 'level-two', 'README.md'),
-        status: 404,
-        ok: 'fail'
-      }]
-
-      expect(result).toEqual(validated)
-      done()
-    })
-  })
-})
-
-describe('función linkStats', () => {
-  it('deberia retornar un obj con total, unique y broken url', (done) => {
-    mdLinks(path.join(cwd, 'level-one', 'level-two', 'README.md'), { validate: true }).then(result => {
-      const totalUrl = {
-        total: 3,
-        unique: 3,
-        broken: 1
-      }
-      expect(linkStats(result)).toEqual(totalUrl);
-      done()
-    })
-  })
-})

@@ -65,8 +65,8 @@ export const extractedLinks = (route) => {
 }
 
 
-export const validateLinks = (route) => {
-  const promiseArr = extractedLinks(route).map(element => {
+export const validateLinks = (arrObjs) => {
+  const promiseArr = arrObjs.map(element => {
     const url = element.href;
     return fetch(url).then(res => {
       element.status = res.status

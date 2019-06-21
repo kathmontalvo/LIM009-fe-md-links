@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1560987366142" clover="3.2.0">
-  <project timestamp="1560987366142" name="All files">
-    <metrics statements="73" coveredstatements="72" conditionals="41" coveredconditionals="36" methods="23" coveredmethods="22" elements="137" coveredelements="130" complexity="0" loc="73" ncloc="73" packages="1" files="3" classes="3"/>
+<coverage generated="1561159601730" clover="3.2.0">
+  <project timestamp="1561159601730" name="All files">
+    <metrics statements="72" coveredstatements="71" conditionals="41" coveredconditionals="36" methods="23" coveredmethods="22" elements="136" coveredelements="129" complexity="0" loc="72" ncloc="72" packages="1" files="3" classes="3"/>
     <file name="api.js" path="C:\Users\Kathlen\Google Drive\Programación\Laboratoria\bootcamp\LIM009-fe-md-links\src\api.js">
-      <metrics statements="7" coveredstatements="7" conditionals="8" coveredconditionals="7" methods="3" coveredmethods="3"/>
-      <line num="5" count="3" type="stmt"/>
+      <metrics statements="6" coveredstatements="6" conditionals="8" coveredconditionals="7" methods="3" coveredmethods="3"/>
       <line num="6" count="8" type="stmt"/>
       <line num="7" count="8" type="cond" truecount="4" falsecount="0"/>
       <line num="8" count="6" type="stmt"/>
@@ -38,34 +37,34 @@
     <file name="main.js" path="C:\Users\Kathlen\Google Drive\Programación\Laboratoria\bootcamp\LIM009-fe-md-links\src\main.js">
       <metrics statements="46" coveredstatements="46" conditionals="13" coveredconditionals="12" methods="15" coveredmethods="15"/>
       <line num="9" count="3" type="stmt"/>
-      <line num="10" count="23" type="stmt"/>
+      <line num="10" count="21" type="stmt"/>
       <line num="13" count="3" type="stmt"/>
-      <line num="14" count="19" type="cond" truecount="2" falsecount="0"/>
+      <line num="14" count="18" type="cond" truecount="2" falsecount="0"/>
       <line num="15" count="17" type="stmt"/>
-      <line num="16" count="2" type="cond" truecount="1" falsecount="1"/>
-      <line num="17" count="2" type="stmt"/>
+      <line num="16" count="1" type="cond" truecount="1" falsecount="1"/>
+      <line num="17" count="1" type="stmt"/>
       <line num="21" count="3" type="cond" truecount="1" falsecount="0"/>
-      <line num="22" count="17" type="stmt"/>
-      <line num="23" count="17" type="stmt"/>
-      <line num="24" count="17" type="cond" truecount="4" falsecount="0"/>
-      <line num="25" count="14" type="stmt"/>
+      <line num="22" count="16" type="stmt"/>
+      <line num="23" count="16" type="stmt"/>
+      <line num="24" count="16" type="cond" truecount="4" falsecount="0"/>
+      <line num="25" count="13" type="stmt"/>
       <line num="27" count="3" type="cond" truecount="2" falsecount="0"/>
       <line num="28" count="2" type="stmt"/>
       <line num="29" count="4" type="stmt"/>
-      <line num="32" count="17" type="stmt"/>
+      <line num="32" count="16" type="stmt"/>
       <line num="36" count="3" type="stmt"/>
-      <line num="37" count="11" type="stmt"/>
-      <line num="38" count="11" type="stmt"/>
-      <line num="39" count="11" type="stmt"/>
-      <line num="44" count="11" type="stmt"/>
+      <line num="37" count="10" type="stmt"/>
+      <line num="38" count="10" type="stmt"/>
+      <line num="39" count="10" type="stmt"/>
+      <line num="44" count="10" type="stmt"/>
       <line num="48" count="3" type="stmt"/>
-      <line num="49" count="10" type="stmt"/>
-      <line num="50" count="10" type="stmt"/>
-      <line num="53" count="10" type="stmt"/>
-      <line num="55" count="10" type="stmt"/>
-      <line num="56" count="30" type="stmt"/>
-      <line num="62" count="10" type="stmt"/>
-      <line num="64" count="10" type="stmt"/>
+      <line num="49" count="9" type="stmt"/>
+      <line num="50" count="9" type="stmt"/>
+      <line num="53" count="9" type="stmt"/>
+      <line num="55" count="9" type="stmt"/>
+      <line num="56" count="27" type="stmt"/>
+      <line num="62" count="9" type="stmt"/>
+      <line num="64" count="9" type="stmt"/>
       <line num="68" count="3" type="stmt"/>
       <line num="69" count="7" type="stmt"/>
       <line num="70" count="21" type="stmt"/>
