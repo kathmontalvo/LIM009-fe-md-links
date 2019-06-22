@@ -2,7 +2,7 @@
   "name": "md-links",
   "version": "1.0.0",
   "description": "md-links library",
-  "main": "./src/api.js",
+  "main": "./lib/api.js",
   "scripts": {
     "test": "jest --coverage",
     "build": "babel src -d lib"
