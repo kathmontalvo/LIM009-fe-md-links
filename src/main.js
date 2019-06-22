@@ -1,10 +1,7 @@
-#!/usr/bin/env node
-
 import fs from 'fs';
 import path from 'path'
 import marked from 'marked'
 import fetch from 'node-fetch'
-import "regenerator-runtime/runtime";
 
 export const isPathAbs = (route) => {
   return path.isAbsolute(route)

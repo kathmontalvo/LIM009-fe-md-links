@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 import { validateLinks, extractedLinks } from './main.js'
 
 export const mdLinks = (route, options) => {
