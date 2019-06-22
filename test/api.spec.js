@@ -1,4 +1,4 @@
-import  mdLinks  from '../src/api.js'
+import  { mdLinks }  from '../src/api.js'
 import path from 'path'
 import mock from 'mock-fs'
 

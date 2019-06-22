@@ -1,6 +1,6 @@
 import { cliOpts } from '../src/cli.js'
 import { validateLinks, linkStats } from '../src/main.js'
-import  mdLinks  from '../src/api.js'
+import  { mdLinks }  from '../src/api.js'
 import process from 'process'
 import path from 'path'
 import mock from 'mock-fs'
