@@ -20,24 +20,24 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">90.91% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>20/22</span>
+        <span class='fraction'>16/16</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">85% </span>
+        <span class="strong">88.89% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>17/20</span>
+        <span class='fraction'>16/18</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">80% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>4/5</span>
+        <span class='fraction'>4/4</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">95% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>19/20</span>
+        <span class='fraction'>15/15</span>
       </div>
     </div>
     <p class="quiet">
@@ -94,8 +94,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">6x</span>
@@ -106,10 +106,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
@@ -128,57 +126,59 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">#!/usr/bin/env node
 &nbsp;
-import  { mdLinks }  from './api.js'
-import { linkStats } from './main.js'
+import mdLinks from './api';
+import { linkStats } from './main';
 &nbsp;
-// https://stackoverflow.com/questions/30782693/run-function-in-script-from-command-line-node-js 
-const [, , ...args] = process.argv
-const route = args[0]
+// https://stackoverflow.com/questions/30782693/run-function-in-script-from-command-line-node-js
+// const [, , ...args] = process.argv;
+// const route = args[0];
 &nbsp;
 const options = (el, args) =&gt; {
-  if (args &amp;&amp; args[1] == '--validate') {
-    return `${el.file} ${el.href} ${el.status} ${el.ok} ${el.text}`
+  if (args &amp;&amp; args[1] === '--validate') {
+    return `${el.file} ${el.href} ${el.status} ${el.ok} ${el.text}`;
   }
-  else <span class="missing-if-branch" title="else path not taken" >E</span>if (args == undefined || <span class="branch-1 cbranch-no" title="branch not covered" >!args[1])</span> {
-    return `${el.file} ${el.href} ${el.text}`
+  <span class="missing-if-branch" title="else path not taken" >E</span>if (args === undefined || <span class="branch-1 cbranch-no" title="branch not covered" >!args[1])</span> {
+    return `${el.file} ${el.href} ${el.text}`;
   }
-}
+};
 &nbsp;
-export const cliOpts = (route, args) =&gt; {
- return mdLinks(route, { validate: true }).then(result =&gt; {
-   const basicStats = linkStats(result);
-   const basic = 
-`Total: ${basicStats.total}
-Unique: ${basicStats.unique}`
-    const validated = `
-Broken: ${basicStats.broken}`
-  
-    if (args &amp;&amp; args[1] == '--stats' &amp;&amp; !args[2]) {
-      return basic
-    } else if (args &amp;&amp; args[1] == '--stats' &amp;&amp; args[2] == '--validate') {
-      return basic + validated
-    } else {
-      const links = result.map(el =&gt; options(el, args)).toString().replace(/,/g, '\n')
-      return links
-    }
-  })
-}
+export default (route, args) =&gt; mdLinks(route, { validate: true }).then((result) =&gt; {
+  const basicStats = linkStats(result);
+  const basic = `Total: ${basicStats.total}
+Unique: ${basicStats.unique}`;
+  const validated = `
+Broken: ${basicStats.broken}`;
+&nbsp;
+  if (args &amp;&amp; args[1] === '--stats' &amp;&amp; !args[2]) {
+    return basic;
+  } if (args &amp;&amp; args[1] === '--stats' &amp;&amp; args[2] === '--validate') {
+    return basic + validated;
+  }
+  const links = result.map(el =&gt; options(el, args)).toString().replace(/,/g, '\n');
+  return links;
+});
 &nbsp;
 // https://stackoverflow.com/questions/40628927/using-jest-to-test-a-command-line-tool
+// It calls the function only if executed through the command line
 &nbsp;
-<span class="missing-if-branch" title="if path not taken" >I</span>if(require.main === module){
-<span class="cstat-no" title="statement not covered" >  cliOpts(route, args).then( <span class="fstat-no" title="function not covered" >re</span>sult =&gt; <span class="cstat-no" title="statement not covered" >console.log(result))</span></span>
-}</pre></td></tr>
+// if (require.main === module) {
+//   cliOpts(route, args).then(result =&gt; console.log(result));
+// }
+&nbsp;
+// export { cliOpts };
+&nbsp;</pre></td></tr>
 </table></pre>
 <div class='push'></div><!-- for sticky footer -->
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri Jun 21 2019 20:48:58 GMT-0500 (GMT-05:00)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri Jun 28 2019 12:15:52 GMT-0500 (GMT-05:00)
 </div>
 </div>
 <script src="prettify.js"></script>
